@@ -32,20 +32,16 @@ class UserController extends AbstractController
             $result = $entityManager->getRepository(User::class)->findAll();
         }
 
-        if (!$result) {
-            throw $this->createNotFoundException();
-        }
-
         $format = strtolower($request->query->get('format', 'json'));
         if (!in_array($format, ['json', 'yaml'], true)) {
             $format = 'json';
         }
 
-        $data = $serializer->serialize($result, $format);
+        $data = $serializer->serialize($result ?? [], $format);
 
         return (new Response(
             $data,
-            200,
+            $result ? 200 : 404,
             ['Content-Type' => $format === 'json' ? 'application/json' : 'application/x-yaml']
         ));
     }
