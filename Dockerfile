@@ -11,6 +11,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-interaction --optimize-autoloader
+RUN php bin/console doctrine:migrations:migrate
 
 EXPOSE 8000
 
